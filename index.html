@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RB Solutions Construtora & Vidraçaria</title>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #3b82f6;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --text: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text);
+            line-height: 1.6;
+            background-color: #fff;
+        }
+
+        /* Navegação */
+        nav {
+            background-color: var(--primary);
+            padding: 1rem 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        nav .logo {
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.4rem;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            margin: 0;
+            padding: 0;
+        }
+        nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        nav a:hover, nav a.active {
+            color: #fff;
+        }
+        .cart-count {
+            background: var(--secondary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: #fff;
+            padding: 4rem 10%;
+            text-align: center;
+        }
+        header h1 { margin: 0; font-size: 2.5rem; }
+        header p { margin: 10px 0 0; color: #cbd5e1; font-size: 1.2rem; }
+
+        section { padding: 3rem 10%; }
+        .hidden { display: none !important; }
+        .bg-light { background-color: var(--light); }
+        h2 { color: var(--primary); border-bottom: 2px solid var(--secondary); padding-bottom: 10px; }
+
+        /* Grid de Produtos */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        .product-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        .product-img-placeholder {
+            background: #e2e8f0;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-weight: bold;
+        }
+        .product-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+        .product-info h3 { margin: 0 0 10px 0; font-size: 1.2rem; color: var(--primary); }
+        .product-info p { margin: 0 0 15px 0; font-size: 0.9rem; color: #64748b; }
+        .product-price { font-size: 1.3rem; font-weight: bold; color: var(--dark); margin-top: auto; margin-bottom: 15px; }
+        
+        /* Botões */
+        .btn {
+            display: block;
+            text-align: center;
+            background-color: var(--secondary);
+            color: #fff;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .btn:hover { background-color: #2563eb; }
+
+        /* Layout do Checkout */
+        .checkout-container {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .checkout-form { flex: 1.5; min-width: 300px; }
+        .checkout-summary { flex: 1; min-width: 300px; background: var(--light); padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 5px; box-sizing: border-box; }
+        
+        .cart-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #cbd5e1; }
+        .total-row { display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2rem; margin-top: 20px; padding-top: 10px; border-top: 2px solid var(--primary); }
+
+        footer { background-color: var(--dark); color: #fff; text-align: center; padding: 2rem 10%; }
+        footer a { color: #60a5fa; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Navegação -->
+    <nav>
+        <div class="logo">RB SOLUTIONS</div>
+        <ul>
+            <li><a onclick="switchPage('home')" id="nav-home" class="active">Início</a></li>
+            <li><a onclick="switchPage('produtos')" id="nav-produtos">Produtos</a></li>
+            <li><a onclick="switchPage('checkout')" id="nav-checkout">Checkout <span class="cart-count" id="cart-count">0</span></a></li>
+        </ul>
+    </nav>
+
+    <!-- Página Inicial -->
+    <div id="page-home">
+        <header>
+            <h1>RB SOLUTIONS CONSTRUTORA</h1>
+            <p>Comércio Varejista de Vidros e Soluções em Construção Civil</p>
+        </header>
+
+        <section>
+            <h2>Sobre a Empresa</h2>
+            <p>A <strong>RB Solutions Construtora</strong> atua com excelência no mercado de construção civil e soluções em vidraçaria. Unimos engenharia qualificada com o fornecimento das melhores opções em vidros para oferecer sofisticação, segurança e durabilidade para a sua obra.</p>
+            <button class="btn" style="max-width: 250px; margin-top: 20px;" onclick="switchPage('produtos')">Ver Catálogo de Produtos</button>
+        </section>
+    </div>
+
+    <!-- Página de Produtos -->
+    <div id="page-produtos" class="hidden">
+        <section>
+            <h2>Nosso Catálogo de Vidros e Serviços</h2>
+            <p>Selecione os produtos ou serviços básicos para adicionar ao seu pedido.</p>
+            
+            <div class="products-grid">
+                <!-- Produto 1 -->
+                <div class="product-card">
+                    <div class="product-img-placeholder">Vidro Temperado</div>
+                    <div class="product-info">
+                        <h3>Vidro Temperado 8mm (m²)</h3>
+                        <p>Ideal para janelas, portas e divisórias. Alta resistência a impactos.</p>
+                        <div class="product-price">R$ 190,00</div>
+                        <button class="btn" onclick="addToCart('Vidro Temperado 8mm (m²)', 190)">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+
+                <!-- Produto 2 -->
+                <div class="product-card">
+                    <div class="product-img-placeholder">Box de Banheiro</div>
+                    <div class="product-info">
+                        <h3>Box Padrão em Vidro</h3>
+                        <p>Box de correr em vidro temperado incolor com kit de alumínio completo.</p>
+                        <div class="product-price">R$ 480,00</div>
+                        <button class="btn" onclick="addToCart('Box Padrão em Vidro', 480)">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+
+                <!-- Produto 3 -->
+                <div class="product-card">
+                    <div class="product-img-placeholder">Vidro Laminado</div>
+                    <div class="product-info">
+                        <h3>Vidro Laminado de Segurança (m²)</h3>
+                        <p>Máxima proteção com película interna. Indicado para coberturas e guarda-corpos.</p>
+                        <div class="product-price">R$ 290,00</div>
+                        <button class="btn" onclick="addToCart('Vidro Laminado de Segurança (m²)', 290)">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+
+                <!-- Produto 4 -->
+                <div class="product-card">
+                    <div class="product-img-placeholder">Espelho Sob Medida</div>
+                    <div class="product-info">
+                        <h3>Espelho Lapidado 4mm (m²)</h3>
+                        <p>Espelho de primeira linha com acabamento lapidado para salas, banheiros ou closets.</p>
+                        <div class="product-price">R$ 220,00</div>
+                        <button class="btn" onclick="addToCart('Espelho Lapidado 4mm (m²)', 220)">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Página de Checkout -->
+    <div id="page-checkout" class="hidden">
+        <section>
+            <h2>Finalizar Pedido</h2>
+            <div class="checkout-container">
+                
+                <!-- Formulário de Envio/Pagamento -->
+                <div class="checkout-form">
+                    <h3>Dados de Entrega e Faturamento</h3>
+                    <form id="orderForm" onsubmit="processOrder(event)">
+                        <div class="form-group">
+                            <label for="name">Nome Completo</label>
+                            <input type="text" id="name" required placeholder="Digite seu nome">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-mail</label>
+                            <input type="email" id="email" required placeholder="seuemail@exemplo.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Endereço da Obra / Entrega</label>
+                            <input type="text" id="address" required placeholder="Rua, número, bairro e cidade">
+                        </div>
+                        <div class="form-group">
+                            <label for="payment">Forma de Pagamento</label>
+                            <select id="payment" required>
+                                <option value="pix">Pix (com 5% de desconto)</option>
+                                <option value="card">Cartão de Crédito</option>
+                                <option value="boleto">Faturamento / Boleto Bancário</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn" style="background-color: #16a34a; margin-top: 20px;">Confirmar e Enviar Pedido</button>
+                    </form>
+                </div>
+
+                <!-- Resumo do Carrinho -->
+                <div class="checkout-summary">
+                    <h3>Resumo do Pedido</h3>
+                    <div id="cart-items-list">
+                        <!-- Itens entram aqui dinamicamente -->
+                        <p style="color: #64748b;">Seu carrinho está vazio.</p>
+                    </div>
+                    <div class="total-row">
+                        <span>Total:</span>
+                        <span id="cart-total">R$ 0,00</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <!-- Rodapé -->
+    <footer>
+        <p><strong>RB SOLUTIONS CONSTRUTORA & VIDRAÇARIA</strong></p>
+        <p>CNPJ: 11.111.550/0001-02 | E-mail: <a href="mailto:Rbsolutions20009@gmail.com">Rbsolutions20009@gmail.com</a></p>
+        <p style="font-size: 0.8rem; margin-top: 20px; color: #94a3b8;">&copy; 2026 RB Solutions. Protótipo de E-commerce.</p>
+    </footer>
+
+    <!-- Lógica de Funcionamento do Carrinho e Navegação -->
+    <script>
+        let cart = [];
+
+        // Alternar entre as páginas (Abas)
+        function switchPage(pageId) {
+            document.getElementById('page-home').classList.add('hidden');
+            document.getElementById('page-produtos').classList.add('hidden');
+            document.getElementById('page-checkout').classList.add('hidden');
+            
+            document.getElementById('nav-home').classList.remove('active');
+            document.getElementById('nav-produtos').classList.remove('active');
+            document.getElementById('nav-checkout').classList.remove('active');
+
+            document.getElementById('page-' + pageId).classList.remove('hidden');
+            document.getElementById('nav-' + pageId).classList.add('active');
+
+            if(pageId === 'checkout') {
+                renderCart();
+            }
+        }
+
+        // Adicionar item ao carrinho
+        function addToCart(name, price) {
+            cart.push({ name: name, price: price });
+            document.getElementById('cart-count').innerText = cart.length;
+            alert(name + " foi adicionado ao seu carrinho!");
+        }
+
+        // Renderizar os itens na tela de Checkout
+        function renderCart() {
+            const listContainer = document.getElementById('cart-items-list');
+            const totalContainer = document.getElementById('cart-total');
+            
+            if (cart.length === 0) {
+                listContainer.innerHTML = '<p style="color: #64748b;">Seu carrinho está vazio.</p>';
+                totalContainer.innerText = 'R$ 0,00';
+                return;
+            }
+
+            listContainer.innerHTML = '';
+            let total = 0;
+
+            cart.forEach((item) => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item';
+                itemElement.innerHTML = `<span>${item.name}</span> <span>R$ ${item.price.toFixed(2).replace('.', ',')}</span>`;
+                listContainer.appendChild(itemElement);
+                total += item.price;
+            });
+
+            totalContainer.innerText = 'R$ ' + total.toFixed(2).replace('.', ',');
+        }
+
+        // Processar o envio do formulário de Checkout
+        function processOrder(event) {
+            event.preventDefault();
+            if(cart.length === 0) {
+                alert("Seu carrinho está vazio! Adicione produtos antes de finalizar.");
+                return;
+            }
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            
+            alert(`Obrigado, ${name}!\nSeu pedido foi enviado com sucesso para análise da RB Solutions.\nUm espelho do pedido será simulado para o e-mail: ${email}.`);
+            
+            // Limpa o carrinho após finalizar
+            cart = [];
+            document.getElementById('cart-count').innerText = 0;
+            document.getElementById('orderForm').reset();
+            switchPage('home');
+        }
+    </script>
+</body>
+</html>
